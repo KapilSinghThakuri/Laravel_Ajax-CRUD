@@ -17,11 +17,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// jQuery-Ajax CRUD Operations
+
 Route::get('/students',[StudentController::class, 'index']);
+// FOR DATA STORE
 Route::post('/students',[StudentController::class, 'store']);
+// FOR DATA FETCH IN FRONTEND
 Route::get('/fetch-students',[StudentController::class, 'fetchStudent']);
+// FOR EDIT DATA
 Route::get('/edit-student/{id}',[StudentController::class,'editStudent']);
+// FOR UPDATE DATA
 Route::put('student-update/{id}',[StudentController::class,'updateStudent']);
+// FOR DELETE DATA
 Route::delete('Student-delete/{id}',[StudentController::class,'deleteStudent']);
 
 
