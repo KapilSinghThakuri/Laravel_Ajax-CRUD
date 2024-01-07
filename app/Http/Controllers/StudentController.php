@@ -55,6 +55,8 @@ class StudentController extends Controller
         }
 
     }
+
+
     public function editStudent($id) {
         $student = Student::find($id);
         if($student){
@@ -70,6 +72,8 @@ class StudentController extends Controller
             ]);
         }
     }
+
+    
     public function updateStudent(Request $request, $id){
         $validator = Validator::make($request->all(),[
             'name'=> 'required|max:255',
@@ -106,5 +110,14 @@ class StudentController extends Controller
                 ]);
             }
         }
+    }
+
+    public function deleteStudent($id) {
+        $student = Student::find($id);
+        $student->delete();
+        return response()->json([
+            'status' => 200,
+            'message' => 'Student Delete Successfully',
+        ]);
     }
 }

@@ -80,7 +80,7 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary update_student">Update</button>
       </div>
     </div>
@@ -88,6 +88,33 @@
 </div>
 
 {{-- End - EditStudentModal --}}
+
+{{-- DeleteStudentModal --}}
+
+<div class="modal fade" id="DeleteStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Student</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+		<!-- JUST FOR CHECKING THE ID IS APPEAR OR NOR THEN, HIDE  -->
+		<input type="hidden" id="delete_stud_id">
+		<h4>Are you sure ?</h4>
+		<p class="text-danger">If you confirm the delete , It deleted all the details of student and you can't undo it.</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger delete_student-btn">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- End - DeleteStudentModal --}}
 
 
 <div class="container mt-4">
@@ -159,6 +186,50 @@
             }
         });
     }
+	
+	
+	// FOR DELETE PART
+	// FOR POP-UP MODAL
+	$(document).on('click', '.delete_student', function(event) {
+		event.preventDefault();
+		var stud_id = $(this).val();
+		// alert(stud_id);
+
+		$('#delete_stud_id').val(stud_id);
+		$('#DeleteStudentModal').modal('show');
+	});
+	// MAIN DELETE FUNCTION
+	$(document).on('click', '.delete_student-btn', function (event) {
+		event.preventDefault();
+
+	//To make when we click delete button, it show in button 'Deleting' until it's deleted done.
+		$(this).text('Deleting');
+
+		var stud_id = $('#delete_stud_id').val();
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			type: "DELETE",
+			url: "/Student-delete/"+stud_id,
+			success: function (response) {
+				// console.log(response);
+
+				$("#success_message").addClass('alert alert-success');
+				$('#success_message').text(response.message);
+				$('#DeleteStudentModal').modal('hide');
+				$('.delete_student-btn').text('Yes, Delete');
+				fetch_student();
+			}
+		});
+	}); 
+
+
+
 	// FOR EDITING PART
 	$(document).on('click', '.edit_student', function(event){
 		event.preventDefault();
@@ -253,6 +324,9 @@
 		$(document).on('click', '.add_student', function(event) {
 			event.preventDefault();
 
+		//To make when we click save button, it show in button 'Saving' until it's Save done.
+		$(this).text('Saving');
+
 			/* Act on the event */
 			// console.log('Hello jQuery ajax');
 
@@ -286,6 +360,7 @@
 						$.each(response.errors, function(key, err_values) {
 						  $('#saveForm_errList').append('<li>'+err_values+'</li>')
 						});
+					$('.add_student').text('Save');
 					}
 					else {
 						$("#saveForm_errList").html(""); 
@@ -294,6 +369,7 @@
 						
 						$("#AddStudentModal").modal('hide'); // for closing the addStudent form after saving the data
 						$("#AddStudentModal").find('input').val(''); // for clearing the input field empty
+						$('.add_student').text('Save');
 						fetch_student();
 					}
 				}
