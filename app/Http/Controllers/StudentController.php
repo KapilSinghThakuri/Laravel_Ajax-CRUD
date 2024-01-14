@@ -14,7 +14,7 @@ class StudentController extends Controller
         return view('Student.index');
     }
     
-    public function fetchStudent()
+    public function fetchStudent(Request $request)
     {
         $students = Student::all();
         return response()->json([
@@ -119,5 +119,35 @@ class StudentController extends Controller
             'status' => 200,
             'message' => 'Student Delete Successfully',
         ]);
+    }
+
+
+    // FOR SEARCHING DATA FEATURES
+
+    public function search( Request $request ){
+        $output = " ";
+
+        $student = Student::where('name','LIKE', '%' . $request->search . '%')
+                        ->orWhere('email','LIKE', '%' . $request->search . '%')
+                        ->orWhere('course','LIKE', '%' . $request->search . '%')
+                        ->orWhere('phone','LIKE', '%' . $request->search . '%')->get();
+        
+
+        foreach($student as $student){
+
+            $output.= 
+            '<tr>   <td>'. $student->id  .'</td> 
+                    <td>'. $student->name  .'</td> 
+                    <td>'. $student->email  .'</td> 
+                    <td>'. $student->phone  .'</td> 
+                    <td>'. $student->course  .'</td> 
+
+                    <td>'.' <a href="" class="btn btn-sm btn-primary"> '.' Edit </a> '.'</td>
+                    <td>'.' <a href="" class="btn btn-sm btn-danger"> '.' Delete </a> '.'</td>
+
+             </tr>';
+
+        }
+        return response($output);
     }
 }

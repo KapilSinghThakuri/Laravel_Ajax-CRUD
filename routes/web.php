@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
+use PHPUnit\Framework\MockObject\Builder\Stub;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// jQuery-Ajax CRUD Operations
+// jQuery-Ajax CRUD OPERATIONS
 
 Route::get('/students',[StudentController::class, 'index']);
 // FOR DATA STORE
@@ -31,4 +34,18 @@ Route::put('student-update/{id}',[StudentController::class,'updateStudent']);
 // FOR DELETE DATA
 Route::delete('Student-delete/{id}',[StudentController::class,'deleteStudent']);
 
+
+// FOR SEARCHING FUNCTION
+Route::get('/search',[StudentController::class,'search']);
+
+
+
+
+
+// jQuery-Ajax IMAGE CRUD OPERATIONS
+
+// FOR EMPLOYEE DETAILS DASHBOARD
+Route::get('/employee',[EmployeeController::class,'index']);
+// FOR STORING EMPLOYEE DATA
+Route::post('employee',[EmployeeController::class,'store']);
 

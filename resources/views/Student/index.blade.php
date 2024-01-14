@@ -132,6 +132,16 @@
 					</h3>
 				</div>
 				<div class="card-body">
+
+
+			<!-- SEARCHING STUDENT DATA FUNCTIONS -->
+				<div class="container m-3">
+					<div class="search">
+						<input type="search" name="search" id="search" class="form-control" placeholder="Search the students">
+					</div>
+				</div>
+
+
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
@@ -144,8 +154,11 @@
 								<th>Delete</th>
 							</tr>
 						</thead>
-						<tbody>	
-						</tbody>
+						<!-- Showing all data which is stored in the DB -->
+						<tbody id="allContent" class="allData"> </tbody>
+
+						<!-- Showing all Searched data  -->
+						<tbody id="searchContent" class="searchData"> </tbody>
 					</table>
 				</div>
 			</div>
@@ -169,9 +182,9 @@
             type: 'GET',
             dataType: 'json',
             success: function(response){
-				$('tbody').html("");
+				$('#allContent').html("");
                 $.each(response.Students, function(key, item) {
-                    $('tbody').append(
+                    $('#allContent').append(
                         '<tr>\
                             <td>'+item.id+'</td>\
                             <td>'+item.name+'</td>\
@@ -187,7 +200,7 @@
         });
     }
 	
-	
+
 	// FOR DELETE PART
 	// FOR POP-UP MODAL
 	$(document).on('click', '.delete_student', function(event) {
@@ -226,7 +239,7 @@
 				fetch_student();
 			}
 		});
-	}); 
+	});
 
 
 
@@ -376,6 +389,37 @@
 			});
 			
 		});
+
+
+	// FOR SEARCHING FUNCTION
+
+		$('#search').on('keyup', function(){
+			// alert('hello');
+
+			$value =$(this).val();
+
+			if($value){
+				$('.allData').hide();
+				$('.searchData').show();
+			}
+			else{
+				$('.allData').show();
+				$('.searchData').hide();
+			}
+			//  alert($value);
+			$.ajax({
+				type: "GET",
+				url: "/search",
+				data: {'search': $value },
+				// dataType: 'json',
+				
+				success: function (data) {
+					// console.log(data);
+					$('#searchContent').html(data);
+				}
+
+			});
+		})
 
 	});
 
