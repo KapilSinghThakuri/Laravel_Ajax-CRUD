@@ -1,1 +1,1 @@
-This is a complete Laravel Ajax CRUD Operations.
+This repo. contain a complete Laravel Ajax CRUD Operations, Without page reload.
